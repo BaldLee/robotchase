@@ -17,6 +17,8 @@ class Robot {
   Robot(const QPointF& position);
   Robot(const QPointF& position, const QPointF& velocity);
   Robot(const QPointF& position, const QPointF& velocity, qreal maxA);
+  Robot(const QPointF& position, const QPointF& velocity, qreal maxA,
+        Qt::GlobalColor color);
   ~Robot();
   void move();
   void setP(qreal x, qreal y);
@@ -26,7 +28,8 @@ class Robot {
   void setMaxA(qreal a);
   void chaseRobot(const Robot& r);
   void avoidRobot(const Robot& r);
-  void avoidBorder(geometry::Border* borders);
+  void avoidBorder(geometry::Border* border);
+  bool getBack(geometry::Border* border);
   QPointF p() const;
   QPointF v() const;
   QPointF a() const;

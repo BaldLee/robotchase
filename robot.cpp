@@ -1,16 +1,39 @@
 #include "robot.h"
 
 Robot::Robot()
-    : _p(QPoint(0.0, 0.0)), _v(QPointF(0.0, 0.0)), _a(QPointF(0.0, 0.0)) {}
+    : _color(Qt::blue),
+      _p(QPoint(0.0, 0.0)),
+      _v(QPointF(0.0, 0.0)),
+      _a(QPointF(0.0, 0.0)) {}
 
 Robot::Robot(const QPointF& position)
-    : _p(position), _v(QPointF(0.0, 0.0)), _a(QPointF(0.0, 0.0)), _maxA(2) {}
+    : _color(Qt::blue),
+      _p(position),
+      _v(QPointF(0.0, 0.0)),
+      _a(QPointF(0.0, 0.0)),
+      _maxA(2) {}
 
 Robot::Robot(const QPointF& position, const QPointF& velocity)
-    : _p(position), _v(velocity), _a(QPointF(0.0, 0.0)), _maxA(2) {}
+    : _color(Qt::blue),
+      _p(position),
+      _v(velocity),
+      _a(QPointF(0.0, 0.0)),
+      _maxA(2) {}
 
 Robot::Robot(const QPointF& position, const QPointF& velocity, qreal maxA)
-    : _p(position), _v(velocity), _a(QPointF(0.0, 0.0)), _maxA(maxA) {}
+    : _color(Qt::blue),
+      _p(position),
+      _v(velocity),
+      _a(QPointF(0.0, 0.0)),
+      _maxA(maxA) {}
+
+Robot::Robot(const QPointF& position, const QPointF& velocity, qreal maxA,
+             Qt::GlobalColor color)
+    : _color(color),
+      _p(position),
+      _v(velocity),
+      _a(QPointF(0.0, 0.0)),
+      _maxA(maxA) {}
 
 Robot::~Robot() {}
 
@@ -26,7 +49,9 @@ void Robot::move() {
   /* Update _v by _a
    * v = v0 + at = v0 + a (t = 1)
    */
-  setV(_v.x() + _a.x(), _v.y() + _a.y());
+  auto newV = QLineF(0.0, 0.0, _v.x() + _a.x(), _v.y() + _a.y());
+  if (newV.length() > 6) newV.setLength(6);
+  setV(newV.x2(), newV.y2());
 }
 
 void Robot::chaseRobot(const Robot& r) {
@@ -50,17 +75,50 @@ void Robot::avoidRobot(const Robot& r) {
 }
 
 void Robot::avoidBorder(geometry::Border* border) {
-  /* avoid witch side? */
-  int is2top = 0;
-  int is2left = 0;
-  if (_v.y() < 0) is2top = 1;
-  if (_v.y() > 0) is2top = -1;
-  if (_v.x() < 0) is2left = 1;
-  if (_v.x() > 0) is2left = -1;
-
   /* time to reach side */
-  qreal sy = 0.0;
-  qreal sx = 0.0;
+  qreal tx = 0.0;
+  qreal ty = 0.0;
+  if (_v.y() < 0) {
+    ty = (border->top - _p.y()) / _v.y();
+  } else if (_v.y() > 0) {
+    ty = (_p.y() - border->buttom) / _v.y();
+  }
+  if (_v.x() < 0) {
+    ty = (border->left - _p.x()) / _v.x();
+  } else if (_v.x() > 0) {
+    ty = (_p.x() - border->right) / _v.x();
+  }
+  QLineF newA(0.0, 0.0, tx, ty);
+  newA.setLength(_maxA);
+  setA(newA.p2());
+}
+
+bool Robot::getBack(geometry::Border* border) {
+  bool isTopOut = _p.y() <= border->top;
+  bool isButtomOut = _p.y() >= border->buttom;
+  bool isLeftOut = _p.x() <= border->left;
+  bool isRightOut = _p.x() >= border->right;
+  qreal sx = 0.0, sy = 0.0;
+  if (isTopOut) {
+    sy = border->top - _p.y();
+  }
+  if (isButtomOut) {
+    sy = border->buttom - _p.y();
+  }
+  if (isLeftOut) {
+    sx = border->left - _p.x();
+  }
+  if (isRightOut) {
+    sx = border->right - _p.x();
+  }
+
+  if (isTopOut || isButtomOut || isLeftOut || isRightOut) {
+    auto newA = QLineF(0.0, 0.0, sx, sy);
+    newA.setLength(_maxA);
+    setA(newA.p2());
+  }
+
+  return isTopOut || isButtomOut || isLeftOut || isRightOut;
 }
 
 void Robot::setP(qreal x, qreal y) {
@@ -89,3 +147,5 @@ QPointF Robot::v() const { return _v; }
 QPointF Robot::a() const { return _a; }
 
 qreal Robot::maxA() const { return _maxA; }
+
+Qt::GlobalColor Robot::color() const { return _color; }

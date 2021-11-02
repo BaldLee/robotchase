@@ -21,8 +21,10 @@ class RobotChase : public QMainWindow {
   QList<Robot *> _robotList;
   geometry::Border *_border;
   void _initTimer();
-  void _addRobot(qreal x, qreal y, qreal vx, qreal vy);
+  void _addRobot(qreal x = 0.0, qreal y = 0.0, qreal vx = 0.0, qreal vy = 0.0,
+                 qreal maxA = 1.0, Qt::GlobalColor color = Qt::blue);
   void _clearRobotList();
+  void paintRobotList(QPainter &painter, const QList<Robot *> &rlist);
  private slots:
   void _timeOutEvent();
 
