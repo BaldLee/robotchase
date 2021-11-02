@@ -49,6 +49,20 @@ void Robot::avoidRobot(const Robot& r) {
   setA(a.p2());
 }
 
+void Robot::avoidBorder(geometry::Border* border) {
+  /* avoid witch side? */
+  int is2top = 0;
+  int is2left = 0;
+  if (_v.y() < 0) is2top = 1;
+  if (_v.y() > 0) is2top = -1;
+  if (_v.x() < 0) is2left = 1;
+  if (_v.x() > 0) is2left = -1;
+
+  /* time to reach side */
+  qreal sy = 0.0;
+  qreal sx = 0.0;
+}
+
 void Robot::setP(qreal x, qreal y) {
   _p.setX(x);
   _p.setY(y);

@@ -19,6 +19,7 @@ class RobotChase : public QMainWindow {
   QTimer *_timer;
   int _run_time;
   QList<Robot *> _robotList;
+  geometry::Border *_border;
   void _initTimer();
   void _addRobot(qreal x, qreal y, qreal vx, qreal vy);
   void _clearRobotList();

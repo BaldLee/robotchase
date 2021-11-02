@@ -26,6 +26,7 @@ class Robot {
   void setMaxA(qreal a);
   void chaseRobot(const Robot& r);
   void avoidRobot(const Robot& r);
+  void avoidBorder(geometry::Border* borders);
   QPointF p() const;
   QPointF v() const;
   QPointF a() const;

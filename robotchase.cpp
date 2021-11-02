@@ -2,6 +2,7 @@
 
 RobotChase::RobotChase(QWidget *parent) : QMainWindow(parent) {
   resize(1000, 1000);
+  _border = new geometry::Border(50, 950, 50, 950);
   _addRobot(300, 300, 1, 0);
   _addRobot(600, 300, 0, 1);
   _addRobot(450, 600, 0, -1);
@@ -10,6 +11,7 @@ RobotChase::RobotChase(QWidget *parent) : QMainWindow(parent) {
 
 RobotChase::~RobotChase() {
   delete _timer;
+  delete _border;
   _clearRobotList();
 }
 
