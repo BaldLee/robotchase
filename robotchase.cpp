@@ -2,7 +2,7 @@
 
 RobotChase::RobotChase(QWidget *parent) : QMainWindow(parent) {
   resize(1000, 1000);
-  _border = new geometry::Border(250, 750, 250, 750);
+  _border = new geometry::Border(200, 800, 200, 800);
   _addRobot(300, 300, 1, 0, 1.0, Qt::blue);
   _addRobot(600, 300, 0, 1, 1.0, Qt::red);
   _addRobot(450, 600, 0, -1, 1.0, Qt::green);

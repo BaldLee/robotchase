@@ -11,13 +11,11 @@ CONFIG += c++11
 SOURCES += \
     geometry.cpp \
     main.cpp \
-    mypainter.cpp \
     robot.cpp \
     robotchase.cpp
 
 HEADERS += \
     geometry.h \
-    mypainter.h \
     robot.h \
     robotchase.h
 

@@ -50,7 +50,7 @@ void Robot::move() {
    * v = v0 + at = v0 + a (t = 1)
    */
   auto newV = QLineF(0.0, 0.0, _v.x() + _a.x(), _v.y() + _a.y());
-  if (newV.length() > 6) newV.setLength(6);
+  if (newV.length() > 10) newV.setLength(10);
   setV(newV.x2(), newV.y2());
 }
 
@@ -74,42 +74,53 @@ void Robot::avoidRobot(const Robot& r) {
   setA(a.p2());
 }
 
-void Robot::avoidBorder(geometry::Border* border) {
+geometry::Border Robot::_getSmallBorder(geometry::Border* _border) {
+  auto centerX = (_border->left + _border->right) / 2;
+  auto centerY = (_border->top + _border->buttom) / 2;
+  return geometry::Border(centerY - (centerY - _border->top) * 0.8,
+                          centerY + (_border->buttom - centerY) * 0.8,
+                          centerX - (centerX - _border->left) * 0.8,
+                          centerX + (_border->right - centerX) * 0.8);
+}
+
+void Robot::avoidBorder(geometry::Border* _border) {
+  auto border = _getSmallBorder(_border);
   /* time to reach side */
   qreal tx = 0.0;
   qreal ty = 0.0;
   if (_v.y() < 0) {
-    ty = (border->top - _p.y()) / _v.y();
+    ty = (border.top - _p.y()) / _v.y();
   } else if (_v.y() > 0) {
-    ty = (_p.y() - border->buttom) / _v.y();
+    ty = (_p.y() - border.buttom) / _v.y();
   }
   if (_v.x() < 0) {
-    ty = (border->left - _p.x()) / _v.x();
+    ty = (border.left - _p.x()) / _v.x();
   } else if (_v.x() > 0) {
-    ty = (_p.x() - border->right) / _v.x();
+    ty = (_p.x() - border.right) / _v.x();
   }
   QLineF newA(0.0, 0.0, tx, ty);
   newA.setLength(_maxA);
   setA(newA.p2());
 }
 
-bool Robot::getBack(geometry::Border* border) {
-  bool isTopOut = _p.y() <= border->top;
-  bool isButtomOut = _p.y() >= border->buttom;
-  bool isLeftOut = _p.x() <= border->left;
-  bool isRightOut = _p.x() >= border->right;
+bool Robot::getBack(geometry::Border* _border) {
+  auto border = _getSmallBorder(_border);
+  bool isTopOut = _p.y() <= border.top;
+  bool isButtomOut = _p.y() >= border.buttom;
+  bool isLeftOut = _p.x() <= border.left;
+  bool isRightOut = _p.x() >= border.right;
   qreal sx = 0.0, sy = 0.0;
   if (isTopOut) {
-    sy = border->top - _p.y();
+    sy = border.top - _p.y();
   }
   if (isButtomOut) {
-    sy = border->buttom - _p.y();
+    sy = border.buttom - _p.y();
   }
   if (isLeftOut) {
-    sx = border->left - _p.x();
+    sx = border.left - _p.x();
   }
   if (isRightOut) {
-    sx = border->right - _p.x();
+    sx = border.right - _p.x();
   }
 
   if (isTopOut || isButtomOut || isLeftOut || isRightOut) {

@@ -1,6 +1,7 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
+#include <QDebug>
 #include <QtMath>
 
 #include "geometry.h"
@@ -11,6 +12,7 @@ class Robot {
   QPointF _v;
   QPointF _a;
   qreal _maxA;
+  geometry::Border _getSmallBorder(geometry::Border* border);
 
  public:
   Robot();

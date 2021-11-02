@@ -1,7 +1,6 @@
 #ifndef ROBOTCHASE_H
 #define ROBOTCHASE_H
 
-#include <QDebug>
 #include <QList>
 #include <QMainWindow>
 #include <QPainter>
