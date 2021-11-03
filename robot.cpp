@@ -1,27 +1,31 @@
 #include "robot.h"
 
 Robot::Robot()
-    : _color(Qt::blue),
+    : _name("default"),
+      _color(Qt::blue),
       _p(QPoint(0.0, 0.0)),
       _v(QPointF(0.0, 0.0)),
       _a(QPointF(0.0, 0.0)) {}
 
 Robot::Robot(const QPointF& position)
-    : _color(Qt::blue),
+    : _name("default"),
+      _color(Qt::blue),
       _p(position),
       _v(QPointF(0.0, 0.0)),
       _a(QPointF(0.0, 0.0)),
       _maxA(2) {}
 
 Robot::Robot(const QPointF& position, const QPointF& velocity)
-    : _color(Qt::blue),
+    : _name("default"),
+      _color(Qt::blue),
       _p(position),
       _v(velocity),
       _a(QPointF(0.0, 0.0)),
       _maxA(2) {}
 
 Robot::Robot(const QPointF& position, const QPointF& velocity, qreal maxA)
-    : _color(Qt::blue),
+    : _name("default"),
+      _color(Qt::blue),
       _p(position),
       _v(velocity),
       _a(QPointF(0.0, 0.0)),
@@ -29,12 +33,20 @@ Robot::Robot(const QPointF& position, const QPointF& velocity, qreal maxA)
 
 Robot::Robot(const QPointF& position, const QPointF& velocity, qreal maxA,
              Qt::GlobalColor color)
-    : _color(color),
+    : _name("default"),
+      _color(color),
       _p(position),
       _v(velocity),
       _a(QPointF(0.0, 0.0)),
       _maxA(maxA) {}
-
+Robot::Robot(const QPointF& position, const QPointF& velocity, qreal maxA,
+             Qt::GlobalColor color, QString name)
+    : _name(name),
+      _color(color),
+      _p(position),
+      _v(velocity),
+      _a(QPointF(0.0, 0.0)),
+      _maxA(maxA) {}
 Robot::~Robot() {}
 
 void Robot::move() {
@@ -158,5 +170,7 @@ QPointF Robot::v() const { return _v; }
 QPointF Robot::a() const { return _a; }
 
 qreal Robot::maxA() const { return _maxA; }
+
+QString Robot::name() const { return _name; }
 
 Qt::GlobalColor Robot::color() const { return _color; }

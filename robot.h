@@ -7,6 +7,7 @@
 #include "geometry.h"
 
 class Robot {
+  QString _name;
   Qt::GlobalColor _color;
   QPointF _p;
   QPointF _v;
@@ -21,6 +22,8 @@ class Robot {
   Robot(const QPointF& position, const QPointF& velocity, qreal maxA);
   Robot(const QPointF& position, const QPointF& velocity, qreal maxA,
         Qt::GlobalColor color);
+  Robot(const QPointF& position, const QPointF& velocity, qreal maxA,
+        Qt::GlobalColor color, QString name);
   ~Robot();
   void move();
   void setP(qreal x, qreal y);
@@ -36,6 +39,7 @@ class Robot {
   QPointF v() const;
   QPointF a() const;
   qreal maxA() const;
+  QString name() const;
   Qt::GlobalColor color() const;
 };
 
